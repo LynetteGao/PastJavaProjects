@@ -1,0 +1,308 @@
+package application;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Font;
+import javafx.scene.layout.AnchorPane;
+import javafx.geometry.Pos;
+import javafx.scene.paint.Color;
+
+public class Main extends Application {
+	private Stage stage;
+	private int numChoices;
+	private String fileName;
+	private Label fileNameLabel;
+	private File file;
+	private Image imageChosen;
+
+	/**
+	 * This method designs the startQuiz scene, displayed when buttonStart
+	 * button is pressed
+	 *
+	 * @return Home scene
+	 * @throws FileNotFoundException
+	 */
+	private Scene HomeScene() throws FileNotFoundException {
+		// initiate user.qBank
+
+		// Create label of the title:
+		Label CS400Label = new Label("\nQuiz Generator\n ");
+		CS400Label.setFont(new Font("Arial", 60));// change font
+		CS400Label.setTextFill(Color.DARKGREY);// change color
+		CS400Label.setMaxWidth(Double.MAX_VALUE);
+		AnchorPane.setLeftAnchor(CS400Label, 0.0);
+		AnchorPane.setRightAnchor(CS400Label, 0.0);
+		CS400Label.setAlignment(Pos.CENTER); // center-aligned
+
+		// Create label of the intro:
+		Label intro = new Label("Welcome to Quiz Generator! " + "\nA brighter academic future starts here"
+				+ "\n(Yea who am I kidding)\n");
+		intro.setFont(new Font("Arial", 15));// change font
+		intro.setTextFill(Color.DARKGREY);// change color
+		intro.setMaxWidth(Double.MAX_VALUE);
+		AnchorPane.setLeftAnchor(intro, 0.0);
+		AnchorPane.setRightAnchor(intro, 0.0);
+		intro.setAlignment(Pos.CENTER);
+
+		// Create BorderPane:
+		BorderPane root = new BorderPane();
+		// root.setMinSize(1500, 1000);
+
+		ObservableList<String> topics = FXCollections.observableArrayList("Topic 1", "Topic 2", "Topic 3");
+		@SuppressWarnings({ "rawtypes", "unchecked" })
+		final ComboBox comboBox = new ComboBox(topics);
+
+		// Create the 2 buttons on the first scene:
+		Button buttonAdd = new Button();
+		Button buttonStart = new Button();
+
+		// buttonAdd directs to the scene of adding questions
+		buttonAdd.setText("Add quiz");
+		buttonAdd.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent t) {
+				stage.setScene(AddQuestion());
+			}
+		});
+
+		// buttonStart directs to the scene of doing quiz
+		buttonStart.setText("Start quiz");
+		buttonStart.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent t) {
+				stage.setScene(Startquiz());
+			}
+		});
+
+		// Designing button's style:
+
+		DropShadow shadow = new DropShadow();
+		// Adding the shadow when the mouse cursor is on
+		buttonStart.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent e) {
+				buttonStart.setEffect(shadow);
+			}
+		});
+		// Removing the shadow when the mouse cursor is off
+		buttonStart.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent e) {
+				buttonStart.setEffect(null);
+			}
+		});
+		// Adding the shadow when the mouse cursor is on
+		buttonAdd.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent e) {
+				buttonAdd.setEffect(shadow);
+			}
+		});
+		// Removing the shadow when the mouse cursor is off
+		buttonAdd.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent e) {
+				buttonAdd.setEffect(null);
+			}
+		});
+		// Setting shadow of the buttons:
+		buttonAdd.setStyle(
+				"-fx-background-color: linear-gradient(to bottom, derive(-fx-text-box-border, -10%), -fx-text-box-border),linear-gradient(from 0px 0px to 0px 5px, derive(-fx-control-inner-background, -9%), -fx-control-inner-background);");
+		buttonStart.setStyle(
+				"-fx-background-color: linear-gradient(to bottom, derive(-fx-text-box-border, -10%), -fx-text-box-border),linear-gradient(from 0px 0px to 0px 5px, derive(-fx-control-inner-background, -9%), -fx-control-inner-background);");
+
+		// Put buttons into vBox:
+		VBox vBox = new VBox(10);
+		vBox.setAlignment(Pos.CENTER);
+		vBox.getChildren().addAll(CS400Label, intro, buttonAdd, buttonStart);
+		root.setCenter(vBox);
+
+		// Setting button size and locations:
+		buttonAdd.setTranslateX(0);
+		buttonAdd.setTranslateY(50);
+		buttonAdd.setPrefWidth(300);
+		buttonAdd.setPrefHeight(60);
+
+		buttonStart.setTranslateX(0);
+		buttonStart.setTranslateY(50);
+		buttonStart.setPrefWidth(300);
+		buttonStart.setPrefHeight(60);
+
+		// Setting logo image:
+		Image logoPic = new Image(new FileInputStream("application/logo.PNG"));
+		ImageView logo = new ImageView(logoPic);
+		logo.setFitWidth(600);
+		logo.setFitHeight(800);
+
+		// root.setTop(CS400Label);
+		// root.setCenter(intro);
+		root.setLeft(logo);
+		return new Scene(root, 1200, 800, Color.GREY);
+	}
+
+	private Scene ManualQuiz() {
+		BorderPane root = new BorderPane();
+		Label label = new Label("Please enter the number of choices:");
+		label.setOnMouseEntered(e->label.setStyle("-fx-font-size:20pt);"));
+		TextField textField = new TextField();
+		Button submit = new Button("Go!");
+		HBox allButtons = new HBox();
+		Button home = new Button("Home");
+		allButtons.getChildren().addAll(submit, home);
+		root.setBottom(allButtons);
+		HBox hbox = new HBox();
+		hbox.getChildren().addAll(label, textField);
+		root.setCenter(hbox);
+		submit.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent t) {
+				try {
+					numChoices = Integer.parseInt(textField.getText());
+					if (numChoices < 0) {
+						throw new Exception("");
+					}
+					stage.setScene(ValidManualQuiz());
+				} catch (Exception e) {
+				}
+			}
+		});
+		home.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent t) {
+				try {
+					stage.setScene(HomeScene());
+				} catch (Exception e) {
+				}
+			}
+		});
+
+		return new Scene(root, 1200, 800, Color.GREY);
+	}
+
+	private Scene JSONQuiz() {
+		BorderPane root = new BorderPane();
+		Label header = new Label("Create your own quiz!");
+		header.setAlignment(Pos.CENTER);
+		VBox fileChoosing = new VBox();
+		Button chooseJSON = new Button("Click here to choose JSON file");
+		FileChooser fileChooser = new FileChooser();
+		chooseJSON.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(final ActionEvent e) {
+				fileChooser.setTitle("Choose JSON file");
+				file = fileChooser.showOpenDialog(stage);
+				if (file != null) {
+					fileName = file.getName();
+					fileNameLabel = new Label("File: " + fileName);
+					VBox newFileChoosing = new VBox();
+					newFileChoosing.getChildren().addAll(chooseJSON, fileNameLabel);
+					root.setCenter(newFileChoosing);
+					System.out.println(file.getName());
+				}
+			}
+		});
+		fileNameLabel = new Label("File: (no attached file yet)");
+		fileChoosing.getChildren().addAll(chooseJSON, fileNameLabel);
+		Label numQuestions = new Label("the number of questions right now: " + user.qBank.getAllQuestions().size());
+		Button done = new Button("Done!");
+		done.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(final ActionEvent e) {
+				if (file == null) {
+					System.out.println("1");
+					// throw new Exception("dds");
+				}
+				try {
+					stage.setScene(HomeScene());
+					Json json = new Json(user);
+					System.out.println(file.getName());
+					json.addQuestionJson(file.getName());
+					// System.out.println(questionBank.getTopicList().toString());
+
+				} catch (IOException | org.json.simple.parser.ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+		});
+		Button addNewQuestion = new Button("Add More Questions");
+		addNewQuestion.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(final ActionEvent e) {
+				if (file == null) {
+					System.out.println("1");
+					// throw new Exception("dds");
+				}
+				try {
+					stage.setScene(AddQuestion());
+					Json json = new Json(user);
+					System.out.println(file.getName());
+					json.addQuestionJson(file.getName());
+					// System.out.println(questionBank.getTopicList().toString());
+
+				} catch (IOException | org.json.simple.parser.ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+		});
+		Button home = new Button("Home");
+		home.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(final ActionEvent e) {
+				try {
+					stage.setScene(HomeScene());
+				} catch (Exception exp) {
+
+				}
+			}
+		});
+		HBox allButtons = new HBox();
+		allButtons.getChildren().addAll(addNewQuestion, done, home);
+		root.setRight(numQuestions);
+		root.setCenter(fileChoosing);
+		root.setTop(header);
+		root.setBottom(allButtons);
+		return new Scene(root);
+	}
+
+	
+	public static void main(String[] args) {
+		launch(args);
+	}
+}
+
+
+

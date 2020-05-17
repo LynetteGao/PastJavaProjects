@@ -1,0 +1,46 @@
+public class StreamsPractice { 
+  public static void main(String[] args) throws IOException { 
+    List<String> words = Arrays.asList(  
+      "the", "Quick", "Brown", "the", "THE", 
+      "fox", "jumped", "jUmped", "over", "the", "lAzy", "dog" 
+    ); 
+ 
+    List<String> list = getSortedWordsList(words,3,2); 
+    System.out.println(list); 
+ 
+    Iterator<String> iter = printWordBlanks(words,"e"); 
+  } 
+ 
+  // return sorted, lowercase, words with min length AS LIST 
+  private static List<String> getSortedWordsList( 
+    List<String> words, int minlength, int n) { 
+ 
+    // collector is a list 
+    List<String> result = words.stream() 
+                .map(thing -> thing.toLowerCase()) 
+                .sorted() 
+                .distinct() 
+                .filter(word -> word.length() >= minLength)  
+                .limit(n) 
+                .collect(Collectors.toList()); 
+    return result; 
+  } 
+ 
+  // print match words with blanks for selected letter 
+  // caution: only words for single letter matches (as written) 
+  private static void printWordBlanks( 
+    List<String> words, String matchChar ) { 
+    words.stream() 
+         .map(x ->x.toLowerCase()) 
+         .distinct() 
+         .filter(n -> n.contains(matchChar)) 
+         .forEach(thing -> { 
+             for (int i=0; i < thing.length(); i++){ 
+                 if (matchChar.contains(thing.charAt(i)+"")) 
+                    System.out.print(thing.charAt(i)+" "); 
+                 else System.out.print("_ "); 
+             } 
+             System.out.println(); 
+          } 
+    ); 
+// see code online for more examples 

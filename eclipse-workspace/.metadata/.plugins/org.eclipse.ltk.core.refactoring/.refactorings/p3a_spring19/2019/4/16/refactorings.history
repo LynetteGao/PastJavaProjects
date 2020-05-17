@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Move element &apos;GraphTest.java&apos; to &apos;p4_PackageManager&apos;&#x0A;- Original project: &apos;p3a_spring19&apos;&#x0A;- Destination element: &apos;p4_PackageManager&apos;&#x0A;- Original element: &apos;GraphTest.java&apos;&#x0A;- Update references to refactored element" description="Move compilation unit" destination="=p4_PackageManager" element1="/src&lt;{GraphTest.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.move" policy="org.eclipse.jdt.ui.moveResources" qualified="false" references="true" stamp="1555283015705" units="1" version="1.0"/>
+</session>

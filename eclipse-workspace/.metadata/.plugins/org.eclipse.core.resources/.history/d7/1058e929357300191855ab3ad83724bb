@@ -1,0 +1,122 @@
+package application;
+
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+import javafx.application.Application;
+import javafx.stage.Stage;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
+//////////////////// ALL ASSIGNMENTS INCLUDE THIS SECTION /////////////////////
+//
+// Title: Main.Java
+// Files: Main.java
+//
+// Author: Lynette Gao
+// Email: qgao38@wisc.edu
+// Lecturer's Name: Andrew Kuemmel
+//
+//////////////////// PAIR PROGRAMMERS COMPLETE THIS SECTION ///////////////////
+//
+// Partner Name:NA
+// Partner Email: NA
+// Partner Lecturer's Name: NA
+//
+// VERIFY THE FOLLOWING BY PLACING AN X NEXT TO EACH TRUE STATEMENT:
+// __x_ Write-up states that pair programming is allowed for this assignment.
+// __x_ We have both read and understand the course Pair Programming Policy.
+// _x__ We have registered our team prior to the team registration deadline.
+//
+///////////////////////////// CREDIT OUTSIDE HELP /////////////////////////////
+//
+// Students who get help from sources other than their partner must fully
+// acknowledge and credit those sources of help here. Instructors and TAs do
+// not need to be credited here, but tutors, friends, relatives, room mates,
+// strangers, and others do. If you received no outside help from either type
+// of source, then please explicitly indicate NONE.
+//
+// Persons: NONE
+// Online Sources: NONE
+//
+/////////////////////////////// 80 COLUMNS WIDE ///////////////////////////////
+
+/**
+ * This class represents a JavaFX window, which extends the Application class
+ * 
+ * @author Lynette
+ *
+ */
+
+public class Main extends Application {
+  @Override
+  public void start(Stage primaryStage) {
+    try {
+      Label greetingLabel = new Label("Hello World!");
+      Label label = new Label("CS400 MyFirstJavaFX"); // add a Label in the top panel, that says
+                                                      // "CS400 MyFirstJavaFX"
+      label.setOnMouseEntered(e->label.setStyle("-fx-font-size:20pt;"));
+      
+//      label.setOnContextMenuRequested(  
+//          event -> {  
+//              Alert alert = new Alert( AlertType.INFORMATION, "Enter your first name" ); 
+//              alert.showAndWait().filter(  
+//                  response -> response == ButtonType.OK );  
+//          }  
+//      ); 
+
+      BorderPane root = new BorderPane();
+      
+      TextArea text = new TextArea("i made it!");
+      root.setRight(text);
+      // setTop
+      root.setTop(greetingLabel);
+      root.setTop(label);
+      // setBottom: Button in the bottom panel with the label "Done" 
+      Button bottomButton = new Button("Done");
+      root.setBottom(bottomButton);
+      bottomButton.setOnAction(e->text.clear());
+      // setCenter:add an ImageView of an Image in the center panel
+      ImageView photo = new ImageView(new Image("IMG_6702.JPG"));
+      photo.setFitWidth(100);
+      photo.setPreserveRatio(true);
+      root.setCenter(photo);
+      // setLeft
+      // add a ComboBox in the left panel, that shows a drop down box with three or more items that
+      // can be selected.
+      ComboBox<String> emailComboBox = new ComboBox<String>();
+      emailComboBox.getItems().addAll("jacob.smith@example.com", "isabella.johnson@example.com",
+          "abc@example.com");
+      root.setLeft(emailComboBox);
+
+
+      // setRight:add a user interface control element- textfield
+
+      
+
+      Scene scene = new Scene(root, 400, 400);// create the scene in size of 400*400
+      scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+      primaryStage.setScene(scene);// the scene of the stage
+      primaryStage.setTitle("Lynette's First JavaFX program");
+      primaryStage.show();// show the stage on the screen
+
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  public static void main(String[] args) {
+    Stream.iterate(10,x->x*3).limit(3).forEach(number->System.out.println(number));
+    Application.launch(args);
+//    int product = IntStream.range(1,4).reduce(1,(a,b)->a*b);
+//    System.out.print(product);
+  }
+}

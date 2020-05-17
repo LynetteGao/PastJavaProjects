@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Encapsulate field &apos;Graph.Graphnode.visited&apos; in &apos;Graph.Graphnode&apos;&#x0A;- Original project: &apos;p4_PackageManager&apos;&#x0A;- Original element: &apos;Graph.Graphnode.visited&apos;&#x0A;- Getter method name: &apos;isVisited&apos;&#x0A;- Setter method name: &apos;setVisited&apos;&#x0A;- Field visibility: &apos;public&apos;&#x0A;- Use getter and setter methods in declaring type" comments="false" declaring="true" description="Encapsulate field &apos;visited&apos;" flags="589830" getter="isVisited" id="org.eclipse.jdt.ui.self.encapsulate" input="/&lt;{Graph.java[Graph[Graphnode^visited" insertion="2" setter="setVisited" stamp="1555272712085" version="1.0" visibility="1"/>
+</session>

@@ -1,0 +1,735 @@
+package application;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Font;
+import javafx.scene.layout.AnchorPane;
+import javafx.geometry.Pos;
+import javafx.scene.paint.Color;
+
+public class Main extends Application {
+	private Stage stage;
+	private int numChoices;
+	private String fileName;
+	private Label fileNameLabel;
+	private File file;
+	private Image imageChosen;
+
+	/**
+	 * This method designs the startQuiz scene, displayed when buttonStart
+	 * button is pressed
+	 *
+	 * @return Home scene
+	 * @throws FileNotFoundException
+	 */
+	private Scene HomeScene() throws FileNotFoundException {
+		// initiate user.qBank
+
+		// Create label of the title:
+		Label CS400Label = new Label("\nQuiz Generator\n ");
+		CS400Label.setFont(new Font("Arial", 60));// change font
+		CS400Label.setTextFill(Color.DARKGREY);// change color
+		CS400Label.setMaxWidth(Double.MAX_VALUE);
+		AnchorPane.setLeftAnchor(CS400Label, 0.0);
+		AnchorPane.setRightAnchor(CS400Label, 0.0);
+		CS400Label.setAlignment(Pos.CENTER); // center-aligned
+
+		// Create label of the intro:
+		Label intro = new Label("Welcome to Quiz Generator! " + "\nA brighter academic future starts here"
+				+ "\n(Yea who am I kidding)\n");
+		intro.setFont(new Font("Arial", 15));// change font
+		intro.setTextFill(Color.DARKGREY);// change color
+		intro.setMaxWidth(Double.MAX_VALUE);
+		AnchorPane.setLeftAnchor(intro, 0.0);
+		AnchorPane.setRightAnchor(intro, 0.0);
+		intro.setAlignment(Pos.CENTER);
+
+		// Create BorderPane:
+		BorderPane root = new BorderPane();
+		// root.setMinSize(1500, 1000);
+
+		ObservableList<String> topics = FXCollections.observableArrayList("Topic 1", "Topic 2", "Topic 3");
+		@SuppressWarnings({ "rawtypes", "unchecked" })
+		final ComboBox comboBox = new ComboBox(topics);
+
+		// Create the 2 buttons on the first scene:
+		Button buttonAdd = new Button();
+		Button buttonStart = new Button();
+
+		// buttonAdd directs to the scene of adding questions
+		buttonAdd.setText("Add quiz");
+		buttonAdd.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent t) {
+				stage.setScene(AddQuestion());
+			}
+		});
+
+		// buttonStart directs to the scene of doing quiz
+		buttonStart.setText("Start quiz");
+		buttonStart.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent t) {
+				stage.setScene(Startquiz());
+			}
+		});
+
+		// Designing button's style:
+
+		DropShadow shadow = new DropShadow();
+		// Adding the shadow when the mouse cursor is on
+		buttonStart.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent e) {
+				buttonStart.setEffect(shadow);
+			}
+		});
+		// Removing the shadow when the mouse cursor is off
+		buttonStart.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent e) {
+				buttonStart.setEffect(null);
+			}
+		});
+		// Adding the shadow when the mouse cursor is on
+		buttonAdd.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent e) {
+				buttonAdd.setEffect(shadow);
+			}
+		});
+		// Removing the shadow when the mouse cursor is off
+		buttonAdd.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent e) {
+				buttonAdd.setEffect(null);
+			}
+		});
+		// Setting shadow of the buttons:
+		buttonAdd.setStyle(
+				"-fx-background-color: linear-gradient(to bottom, derive(-fx-text-box-border, -10%), -fx-text-box-border),linear-gradient(from 0px 0px to 0px 5px, derive(-fx-control-inner-background, -9%), -fx-control-inner-background);");
+		buttonStart.setStyle(
+				"-fx-background-color: linear-gradient(to bottom, derive(-fx-text-box-border, -10%), -fx-text-box-border),linear-gradient(from 0px 0px to 0px 5px, derive(-fx-control-inner-background, -9%), -fx-control-inner-background);");
+
+		// Put buttons into vBox:
+		VBox vBox = new VBox(10);
+		vBox.setAlignment(Pos.CENTER);
+		vBox.getChildren().addAll(CS400Label, intro, buttonAdd, buttonStart);
+		root.setCenter(vBox);
+
+		// Setting button size and locations:
+		buttonAdd.setTranslateX(0);
+		buttonAdd.setTranslateY(50);
+		buttonAdd.setPrefWidth(300);
+		buttonAdd.setPrefHeight(60);
+
+		buttonStart.setTranslateX(0);
+		buttonStart.setTranslateY(50);
+		buttonStart.setPrefWidth(300);
+		buttonStart.setPrefHeight(60);
+
+		// Setting logo image:
+		Image logoPic = new Image(new FileInputStream("application/logo.PNG"));
+		ImageView logo = new ImageView(logoPic);
+		logo.setFitWidth(600);
+		logo.setFitHeight(800);
+
+		// root.setTop(CS400Label);
+		// root.setCenter(intro);
+		root.setLeft(logo);
+		return new Scene(root, 1200, 800, Color.GREY);
+	}
+
+	private Scene ManualQuiz() {
+		BorderPane root = new BorderPane();
+		Label label = new Label("Please enter the number of choices:");
+		label.setOnMouseEntered(e->label.setStyle("-fx-font-size:20pt);"));
+		TextField textField = new TextField();
+		Button submit = new Button("Go!");
+		HBox allButtons = new HBox();
+		Button home = new Button("Home");
+		allButtons.getChildren().addAll(submit, home);
+		root.setBottom(allButtons);
+		HBox hbox = new HBox();
+		hbox.getChildren().addAll(label, textField);
+		root.setCenter(hbox);
+		submit.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent t) {
+				try {
+					numChoices = Integer.parseInt(textField.getText());
+					if (numChoices < 0) {
+						throw new Exception("");
+					}
+					stage.setScene(ValidManualQuiz());
+				} catch (Exception e) {
+				}
+			}
+		});
+		home.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent t) {
+				try {
+					stage.setScene(HomeScene());
+				} catch (Exception e) {
+				}
+			}
+		});
+
+		return new Scene(root, 1200, 800, Color.GREY);
+	}
+
+	private Scene JSONQuiz() {
+		BorderPane root = new BorderPane();
+		Label header = new Label("Create your own quiz!");
+		header.setAlignment(Pos.CENTER);
+		VBox fileChoosing = new VBox();
+		Button chooseJSON = new Button("Click here to choose JSON file");
+		FileChooser fileChooser = new FileChooser();
+		chooseJSON.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(final ActionEvent e) {
+				fileChooser.setTitle("Choose JSON file");
+				file = fileChooser.showOpenDialog(stage);
+				if (file != null) {
+					fileName = file.getName();
+					fileNameLabel = new Label("File: " + fileName);
+					VBox newFileChoosing = new VBox();
+					newFileChoosing.getChildren().addAll(chooseJSON, fileNameLabel);
+					root.setCenter(newFileChoosing);
+					System.out.println(file.getName());
+				}
+			}
+		});
+		fileNameLabel = new Label("File: (no attached file yet)");
+		fileChoosing.getChildren().addAll(chooseJSON, fileNameLabel);
+		Label numQuestions = new Label("the number of questions right now: " + user.qBank.getAllQuestions().size());
+		Button done = new Button("Done!");
+		done.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(final ActionEvent e) {
+				if (file == null) {
+					System.out.println("1");
+					// throw new Exception("dds");
+				}
+				try {
+					stage.setScene(HomeScene());
+					Json json = new Json(user);
+					System.out.println(file.getName());
+					json.addQuestionJson(file.getName());
+					// System.out.println(questionBank.getTopicList().toString());
+
+				} catch (IOException | org.json.simple.parser.ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+		});
+		Button addNewQuestion = new Button("Add More Questions");
+		addNewQuestion.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(final ActionEvent e) {
+				if (file == null) {
+					System.out.println("1");
+					// throw new Exception("dds");
+				}
+				try {
+					stage.setScene(AddQuestion());
+					Json json = new Json(user);
+					System.out.println(file.getName());
+					json.addQuestionJson(file.getName());
+					// System.out.println(questionBank.getTopicList().toString());
+
+				} catch (IOException | org.json.simple.parser.ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+		});
+		Button home = new Button("Home");
+		home.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(final ActionEvent e) {
+				try {
+					stage.setScene(HomeScene());
+				} catch (Exception exp) {
+
+				}
+			}
+		});
+		HBox allButtons = new HBox();
+		allButtons.getChildren().addAll(addNewQuestion, done, home);
+		root.setRight(numQuestions);
+		root.setCenter(fileChoosing);
+		root.setTop(header);
+		root.setBottom(allButtons);
+		return new Scene(root);
+	}
+
+	private Scene ValidManualQuiz() {
+		BorderPane root = new BorderPane();
+		Label header = new Label("Create your own quiz!");
+		header.setAlignment(Pos.CENTER);
+		root.setTop(header);
+
+		Label numQuestionsLabel = new Label(
+				"the number of questions right now: " + user.qBank.getAllQuestions().size());
+		root.setRight(numQuestionsLabel);
+		ArrayList<String> allTopics = new ArrayList<>();
+		for (int i = 0; i < user.qBank.getTopicList().size(); ++i) {
+			allTopics.add(user.qBank.getTopicList().get(i));
+		}
+		allTopics.add("other");
+		ChoiceBox<String> topicChosen = new ChoiceBox<String>(FXCollections.observableArrayList(allTopics));
+		VBox allDetails = new VBox();
+
+		HBox topic = new HBox();
+		Label quizTopic = new Label("Quiz Topic:  ");
+		Label addNewTopic = new Label("Or add new topic");
+		TextField newTopic = new TextField();
+		topic.getChildren().addAll(quizTopic, topicChosen, addNewTopic, newTopic);
+
+		HBox allDescription = new HBox();
+		Label description = new Label("Description:  ");
+		TextField getDescription = new TextField();
+		allDescription.getChildren().addAll(description, getDescription);
+
+		VBox allChoices = new VBox();
+		Label choice = new Label("Choices: ");
+		allChoices.getChildren().add(choice);
+		String[] choices = new String[numChoices];
+		TextField[] options = new TextField[numChoices];
+		for (int i = 0; i < numChoices; ++i) {
+			options[i] = new TextField();
+		}
+		for (int i = 0; i < numChoices; ++i) {
+			Label choiceLabel = new Label(i + 1 + ": ");
+
+			allChoices.getChildren().addAll(choiceLabel, options[i]);
+		}
+
+		HBox correctAnswer = new HBox();
+		Label correctLabel = new Label("Correct Answer (Please choose a number corresponding to a correct choice): ");
+		Integer[] oneToNum = new Integer[numChoices];
+		for (int i = 0; i < numChoices; ++i) {
+			oneToNum[i] = new Integer(i) + 1;
+		}
+		ChoiceBox<Integer> correctNum = new ChoiceBox<Integer>(FXCollections.observableArrayList(oneToNum));
+		correctAnswer.getChildren().addAll(correctLabel, correctNum);
+
+		HBox image = new HBox();
+		Label imageLabel = new Label("image file: ");
+		Button choosingImage = new Button("Browse your image (.png, .jpg, or, .jpeg)");
+		FileChooser fileChooser = new FileChooser();
+		fileNameLabel = new Label("File: (no attached file yet)");
+		imageChosen = null;
+		choosingImage.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(final ActionEvent e) {
+				try {
+					fileChooser.setTitle("Choose JSON file");
+					file = fileChooser.showOpenDialog(stage);
+					if (file != null) {
+
+						fileName = file.getName();
+						if (!fileName.toLowerCase().endsWith("png") && !fileName.toLowerCase().endsWith("jpeg")
+								&& !fileName.toLowerCase().endsWith("jpg")) {
+							throw new Exception();
+						}
+						fileNameLabel.setText("File: " + fileName);
+					}
+
+				} catch (Exception exp) {
+					fileName = null;
+				}
+			}
+		});
+
+		image.getChildren().addAll(imageLabel, choosingImage, fileNameLabel);
+
+		allDetails.getChildren().addAll(topic, allDescription, allChoices, correctAnswer, image);
+		root.setCenter(allDetails);
+
+		HBox allButtons = new HBox();
+		Button home = new Button("Home");
+		Button addMoreQuestions = new Button("Add More Questions");
+		Button done = new Button("Done!");
+		allButtons.getChildren().addAll(addMoreQuestions, done, home);
+		root.setBottom(allButtons);
+
+		home.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent t) {
+				try {
+					stage.setScene(HomeScene());
+				} catch (Exception e) {
+				}
+			}
+		});
+		addMoreQuestions.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent t) {
+				try {
+					String validTopic = null;
+					;
+					if (topicChosen.getValue() != null && !topicChosen.getValue().equals("other")) {
+						validTopic = topicChosen.getValue();
+					} else if (newTopic.getText() != null && !newTopic.getText().equals("")) {
+						validTopic = newTopic.getText();
+					} else {
+						throw new Exception("asadsa");
+					}
+					String description;
+					if (getDescription.getText() != null && !getDescription.getText().equals("")) {
+						description = getDescription.getText();
+					} else {
+						throw new Exception("sdsad");
+					}
+					for (int i = 0; i < numChoices; ++i) {
+						if (options[i].getText() != null && !options[i].getText().equals("")) {
+							choices[i] = options[i].getText();
+						} else {
+							throw new Exception("sda");
+						}
+					}
+					String correctChoice;
+					if (correctNum.getValue() != null) {
+						correctChoice = choices[correctNum.getValue() - 1];
+					} else {
+						throw new Exception();
+					}
+					if (file != null) {
+						imageChosen = new Image(file.toURI().toString());
+						user.qBank.addQuestion(
+								new Question(validTopic, description, choices, correctChoice, imageChosen));
+					} else {
+						user.qBank.addQuestion(new Question(validTopic, description, choices, correctChoice, null));
+					}
+					stage.setScene(AddQuestion());
+				} catch (Exception e) {
+					System.out.println(e.getMessage());
+				}
+
+			}
+		});
+		done.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent t) {
+				try {
+					String validTopic;
+					if (topicChosen.getValue() != null && !topicChosen.getValue().equals("other")) {
+						validTopic = topicChosen.getValue();
+					} else if (newTopic.getText() != null && !newTopic.getText().equals("")) {
+						validTopic = newTopic.getText();
+					} else {
+						throw new Exception();
+					}
+					String description;
+					if (getDescription.getText() != null && !getDescription.getText().equals("")) {
+						description = getDescription.getText();
+					} else {
+						throw new Exception();
+					}
+					for (int i = 0; i < numChoices; ++i) {
+						if (options[i].getText() != null && !options[i].getText().equals("")) {
+							choices[i] = options[i].getText();
+						} else {
+							throw new Exception();
+						}
+					}
+					String correctChoice;
+					if (correctNum.getValue() != null) {
+						correctChoice = choices[correctNum.getValue()];
+					} else {
+						throw new Exception();
+					}
+					if (file != null) {
+						imageChosen = new Image(file.toURI().toString());
+						user.qBank.addQuestion(
+								new Question(validTopic, description, choices, correctChoice, imageChosen));
+					} else {
+						user.qBank.addQuestion(new Question(validTopic, description, choices, correctChoice, null));
+					}
+				} catch (Exception e) {
+				}
+
+			}
+		});
+		return new Scene(root);
+
+	}
+
+	/**
+	 * This method designs the scene where the user can add questions to the
+	 * question bank
+	 *
+	 * @return addQuestion scene
+	 */
+	private Scene AddQuestion() {
+		BorderPane root = new BorderPane();
+		HBox hbox = new HBox();
+		hbox.setAlignment(Pos.CENTER);
+		Button jsonQuiz = new Button("Add quizzes from a JSON file");
+		Button manualQuiz = new Button("Create your own quiz");
+		hbox.getChildren().addAll(jsonQuiz, manualQuiz);
+		root.setCenter(hbox);
+		Button homeButton = new Button("Home");
+		root.setBottom(homeButton);
+		jsonQuiz.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent t) {
+				try {
+					stage.setScene(JSONQuiz());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		manualQuiz.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent t) {
+				try {
+					stage.setScene(ManualQuiz());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		homeButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent t) {
+				try {
+					stage.setScene(HomeScene());
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		// root.getChildren().add(homeButton);
+		return new Scene(root);
+
+	}
+
+	/**
+	 * This method design the scene where user can select the number of
+	 * questions he or she would like to do for each topic. The number will be
+	 * used for quiz generation. Displayed when startQuiz button is pressed.
+	 *
+	 * @return startQuiz scene
+	 * @throws FileNotFoundException
+	 */
+	private Scene Startquiz() {
+		// Creating guidance info label:
+		Label label = new Label("Please enter the number of question you want for each topic:");
+		label.setFont(new Font("Arial", 20));
+		ScrollPane root = new ScrollPane();
+
+		VBox topic = new VBox();
+		topic.getChildren().addAll(label);
+		topic.setAlignment(Pos.CENTER);
+
+		// List every topic with a text box asking
+		// the number of questions the user would like to have:
+		for (int i = 0; i < user.qBank.allTopics.size(); i++) {
+			Label nameLabel = new Label(
+					"Topic : " + user.qBank.allTopics.get(i) + user.qBank.allQuestions.get(i).size());
+			TextField text = new TextField();
+			// topic.getChildren().add(i, text);
+			topic.getChildren().addAll(nameLabel, text);
+		}
+
+		// Pressing startButton:
+		// Generating quiz based on user's input,
+		// And directing the user to the scene of displaying the first question
+		Button startButton = new Button("Start!");
+		topic.getChildren().addAll(startButton);
+
+		startButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				ObservableList<Node> List = topic.getChildren();
+
+				for (int a = 0; a < List.size(); a++) {
+					if (List.get(a).getClass().getName().equals("javafx.scene.control.TextField")) {
+						TextField tf = (TextField) List.get(a);
+						try {
+							int num1 = Integer.parseInt(tf.getText());
+							user.preference.add(Integer.parseInt(tf.getText()));
+						} catch (NumberFormatException ex) {
+							user.preference.add(0);
+							continue;
+						} catch (NullPointerException ex) {
+
+							user.preference.add(0);
+							continue;
+						}
+
+					}
+				}
+
+				user.generateQuiz();
+
+				stage.setScene(question(0));
+			}
+		}
+
+		);
+		root.setContent(topic);
+		root.setMinSize(1500, 1000);
+
+		return new Scene(root, 1200, 800, Color.GREY);
+	}
+
+	public Scene question(int indexOfQuestion) {
+		Question question = user.quiz.get(indexOfQuestion);
+
+		ArrayList<CheckBox> boxes = new ArrayList<CheckBox>();
+
+		for (int i = 0; i < question.choices().length; i++) {
+			CheckBox box = new CheckBox(question.choices()[i].option);
+			boxes.add(box);
+		}
+
+		Button check = new Button("Check Answer");
+		check.setOnAction(e -> questionEvent(indexOfQuestion, boxes, false));
+
+		BorderPane root = new BorderPane();
+		VBox vbox = new VBox(10);
+		vbox.setAlignment(Pos.CENTER_LEFT);
+
+		Label description = new Label(question.getDescription());
+		Label space = new Label("			"); 
+		vbox.getChildren().addAll(description);
+		if (question.getImage() != null) {
+			ImageView imageV = new ImageView(question.getImage());
+			imageV.setFitWidth(200);
+			imageV.setFitHeight(200);
+			vbox.getChildren().addAll(imageV);
+		}
+
+		vbox.getChildren().addAll(boxes);
+		vbox.getChildren().addAll(check);
+
+		root.setCenter(vbox);
+		return new Scene(root, 1200, 800, Color.GREY);
+	}
+
+	private void questionEvent(int indexOfQuestion, ArrayList<CheckBox> boxes, boolean isEnd) {
+
+		int selected = 0;
+		int userAnswer = 999;
+
+		for (CheckBox box : boxes) {
+			if (box.isSelected()) {
+				userAnswer = boxes.indexOf(box);
+				selected++;
+			}
+			if (selected > 1) {
+				userAnswer = 999;
+				System.out.println("More than 1 option selected");
+				break;
+			}
+		}
+		if (selected == 0)
+			System.out.println("No answer selected");
+
+		// System.out.println(userAnswer);
+		if (userAnswer < user.quiz.get(indexOfQuestion).choices().length) {
+			user.recordAnswer(indexOfQuestion, userAnswer);
+		}
+
+		stage.setScene(answer(indexOfQuestion));
+	}
+
+	public Scene answer(int indexOfQuestion) {
+		BorderPane root = new BorderPane();
+		VBox vbox = new VBox();
+
+		Question question = user.quiz.get(indexOfQuestion);
+		String userAnswer = question.getChoice(user.userChoices.get(indexOfQuestion)).option;
+		Label description = new Label(question.getDescription());
+		Label corAns = new Label("Correct answer: " +question.corAn());
+		Label usAns = new Label("Your answer: " +userAnswer);
+
+		Button next = new Button("Next Question");
+		next.setOnAction(e -> question(indexOfQuestion + 1));
+
+		Button submit = new Button("Submit Quiz");
+		submit.setOnAction(e -> stage.setScene(endQuiz()));
+
+		vbox.getChildren().addAll(description, corAns, usAns);
+		if (indexOfQuestion + 1 < user.quiz.size()) {
+			vbox.getChildren().add(next);
+		} else {
+			vbox.getChildren().add(submit);
+		}
+		
+		vbox.setAlignment(Pos.CENTER_LEFT);
+		root.setCenter(vbox);
+		return new Scene(root, 1200, 800, Color.GREY);
+	}
+
+	public Scene endQuiz() {
+		BorderPane root = new BorderPane();
+		Label conclusion = new Label("Congrats! \nHere is your Score:");
+		Label score = new Label(Double.toString(user.getScore()*100) +"%");
+
+		VBox vbox = new VBox();
+		vbox.getChildren().addAll(conclusion, score);
+		root.setCenter(vbox);
+		return new Scene(root, 1200, 800, Color.GREY);
+	}
+
+	/**
+	 * This method is the driver of displaying all Scenes:
+	 */
+	@Override
+	public void start(Stage primaryStage) {
+		user = new User();
+
+		try {
+			stage = primaryStage;
+			//stage.setMaximized(true);
+			Scene scene = HomeScene();
+			primaryStage.setScene(scene);
+			primaryStage.setTitle("Quiz Generator");
+			primaryStage.show();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void main(String[] args) {
+		launch(args);
+	}
+}
+
+
+

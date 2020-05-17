@@ -1,0 +1,16 @@
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/arch=x86_64
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/name=Local
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/os=macosx
+configDescList=org.eclipse.launchbar.core.descriptorType.default\:P9Tests,org.eclipse.launchbar.core.descriptorType.default\:BadgersSettleDown,org.eclipse.launchbar.core.descriptorType.default\:ProcessScheduler,org.eclipse.launchbar.core.descriptorType.default\:PApplet,org.eclipse.launchbar.core.descriptorType.default\:Mammal,org.eclipse.launchbar.core.descriptorType.default\:ProcessSchedulerTests,org.eclipse.launchbar.core.descriptorType.default\:ScannerPractice,org.eclipse.launchbar.core.descriptorType.default\:Dog,org.eclipse.launchbar.core.descriptorType.default\:TestDS_Deb,org.eclipse.launchbar.core.descriptorType.default\:TestDS_My,org.eclipse.launchbar.core.descriptorType.default\:BSTTest.testBST_004_check_preOrder_for_balanced_insert_order,org.eclipse.launchbar.core.descriptorType.default\:BSTTest,org.eclipse.launchbar.core.descriptorType.default\:TestDS_All,org.eclipse.launchbar.core.descriptorType.default\:BSTTest.testBST_008_check_preOrder_for_not_balanced_insert_order,org.eclipse.launchbar.core.descriptorType.default\:BSTTest.testBST_009_check_postOrder_for_not_balanced_insert_order,org.eclipse.launchbar.core.descriptorType.default\:BSTTest.testBST_013_check_delete_for_two_child,org.eclipse.launchbar.core.descriptorType.default\:BSTTest.testBST_012_check_delete_for_two_child,org.eclipse.launchbar.core.descriptorType.default\:AVLTest.testAVL_006_remove_large_order,org.eclipse.launchbar.core.descriptorType.default\:BSTTest.testBST_001_empty_traversal_orders,org.eclipse.launchbar.core.descriptorType.default\:BSTTest.testBST_011_check_delete_for_one_child_for_unbalanced,org.eclipse.launchbar.core.descriptorType.default\:BSTTest (1),org.eclipse.launchbar.core.descriptorType.default\:AVLTest,org.eclipse.launchbar.core.descriptorType.default\:HashTableTest.test002_getKey,org.eclipse.launchbar.core.descriptorType.default\:HashTableTest
+eclipse.preferences.version=1
+org.eclipse.launchbar.core.descriptorType.default\:AVLTest/activeLaunchMode=run
+org.eclipse.launchbar.core.descriptorType.default\:BSTTest\ (1)/activeLaunchMode=run
+org.eclipse.launchbar.core.descriptorType.default\:BSTTest.testBST_004_check_preOrder_for_balanced_insert_order/activeLaunchMode=run
+org.eclipse.launchbar.core.descriptorType.default\:BSTTest.testBST_009_check_postOrder_for_not_balanced_insert_order/activeLaunchMode=run
+org.eclipse.launchbar.core.descriptorType.default\:BSTTest.testBST_012_check_delete_for_two_child/activeLaunchMode=run
+org.eclipse.launchbar.core.descriptorType.default\:BSTTest.testBST_012_check_delete_for_two_child/activeLaunchTarget=org.eclipse.launchbar.core.launchTargetType.local\:Local
+org.eclipse.launchbar.core.descriptorType.default\:BSTTest/activeLaunchMode=run
+org.eclipse.launchbar.core.descriptorType.default\:HashTableTest/activeLaunchMode=run
+org.eclipse.launchbar.core.descriptorType.default\:P9Tests/activeLaunchMode=run
+org.eclipse.launchbar.core.descriptorType.default\:P9Tests/activeLaunchTarget=org.eclipse.launchbar.core.launchTargetType.local\:Local
+org.eclipse.launchbar.core.descriptorType.default\:TestDS_All/activeLaunchMode=coverage
